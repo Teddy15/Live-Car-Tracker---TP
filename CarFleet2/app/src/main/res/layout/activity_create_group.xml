@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:layout_height="match_parent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:text="@string/hello_world"
-        android:textSize = "25sp"
-        android:gravity="center"
-        />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id = "@+id/textview_create_group"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:text="@string/create_your_group"
+            android:textSize = "25sp"
+            android:gravity="center"
+
+            />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="125dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_group_add_black"
+            />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edittext_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/group_name"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+        <EditText
+            android:id = "@+id/edittext_group_members"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint = "@string/add_group_members"
+            android:inputType = "textAutoCorrect"/>
+        <Button
+            android:id="@+id/button_create_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorAccent"
+            android:text="@string/create_group"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>

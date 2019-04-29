@@ -27,4 +27,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_car" />
+    <ImageButton
+        android:id="@+id/create_group_button"
+        android:layout_width="93dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginLeft="57dp"
+        android:layout_marginTop="235dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_group_add_purple_24dp" />
+    <ImageButton
+        android:id="@+id/log_out_button"
+        android:layout_width="93dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="235dp"
+        android:layout_marginEnd="57dp"
+        android:layout_marginRight="57dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_exit_to_app_purple_24dp" />
+
 </android.support.constraint.ConstraintLayout>

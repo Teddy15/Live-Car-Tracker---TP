@@ -1,6 +1,5 @@
 package com.example.carfleet;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +47,7 @@ public class   LoginActivity extends AppCompatActivity {
 
                     if (currentUser != null) {
                         Snackbar.make(mButtonLogin, "Successfully Logged In!", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         //finish();
                     } else {
@@ -59,24 +58,13 @@ public class   LoginActivity extends AppCompatActivity {
             }
 
         });
-
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intentMainActivity);
-            }
-        });
-
     }
+
     public boolean validate() {
         boolean valid = true;
-
-        //Get values from EditText fields
         String Email = mTextEmail.getText().toString();
         String Password = mTextPassword.getText().toString();
 
-        //Handling validation for Email field
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
             valid = false;
             mTextEmail.setError("Please enter valid email!");
@@ -84,7 +72,6 @@ public class   LoginActivity extends AppCompatActivity {
             mTextEmail.setError(null);
         }
 
-        //Handling validation for Password field
         if (Password.isEmpty()) {
             valid = false;
             mTextPassword.setError("Please enter valid password!");
@@ -96,63 +83,6 @@ public class   LoginActivity extends AppCompatActivity {
                 mTextPassword.setError("Password is to short!");
             }
         }
-
         return valid;
     }
-        /*mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = mTextEmail.getText().toString().trim();
-                String password = mTextPassword.getText().toString().trim();
-
-                if(validate(email, password)) {
-
-                    boolean result = db.checkUser(email, password);
-
-                    if (result) {
-                        Intent LoginScreen = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(LoginScreen);
-                        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                                R.style.AppTheme_Dark_Dialog);
-                        progressDialog.setIndeterminate(true);
-                        progressDialog.setMessage("Authenticating...");
-                        progressDialog.show();
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        mButtonLogin.setEnabled(true);
-                                        finish();
-                                        progressDialog.dismiss();
-                                    }
-                                }, 3000);
-                    }else {
-                        Toast.makeText(LoginActivity.this, "Login Error!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    Toast.makeText(LoginActivity.this, "Login Error!", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-    }
-    public boolean validate(String email, String password) {
-        boolean valid = true;
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mTextEmail.setError("Enter a valid email address!");
-            valid = false;
-        } else {
-            mTextEmail.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mTextPassword.setError("Between 4 and 10 alphanumeric characters");
-            valid = false;
-        } else {
-            mTextPassword.setError(null);
-        }
-
-        return valid;
-    }*/
 }
