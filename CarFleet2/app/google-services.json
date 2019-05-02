@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "87987852327",
+    "firebase_url": "https://companyfleet-36f8e.firebaseio.com",
+    "project_id": "companyfleet-36f8e",
+    "storage_bucket": "companyfleet-36f8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87987852327:android:a8ad5c3a7baff617",
+        "android_client_info": {
+          "package_name": "com.example.carfleet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87987852327-n90tloecoiafso4l4vkgun2bvv7ulu9q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carfleet",
+            "certificate_hash": "2b8c290138867a253973ebfc8abafb6792504429"
+          }
+        },
+        {
+          "client_id": "87987852327-lmgdqao72bq68vb9kok20cakmpvmg245.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgFkr1WJwykaBUy2ZEnU0dK5YpNrR7buc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87987852327-lmgdqao72bq68vb9kok20cakmpvmg245.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

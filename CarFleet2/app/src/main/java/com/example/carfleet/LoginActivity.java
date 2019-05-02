@@ -1,88 +1,97 @@
 package com.example.carfleet;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class   LoginActivity extends AppCompatActivity {
-    DatabaseHelper db;
-    EditText mTextEmail;
-    EditText mTextPassword;
-    Button mButtonLogin;
-    TextView mTextViewRegister;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class LoginActivity extends AppCompatActivity {
+    private EditText editTextEmail;
+    private EditText editTextPassword;
+    private Button buttonRegister;
+    private Button buttonLogin;
+
+    private FirebaseAuth auth;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = new DatabaseHelper(this);
-        mTextEmail = (EditText) findViewById(R.id.edittext_email);
-        mTextPassword = (EditText) findViewById(R.id.edittext_password);
-        mButtonLogin = (Button) findViewById(R.id.button_login);
-        mTextViewRegister = (TextView) findViewById(R.id.textview_register);
+        auth = FirebaseAuth.getInstance();
 
-        mTextViewRegister.setOnClickListener(new View.OnClickListener() {
+        progressDialog = new ProgressDialog(this);
+
+        editTextEmail = (EditText) findViewById(R.id.email);
+        editTextPassword = (EditText) findViewById(R.id.password);
+        buttonRegister = (Button) findViewById(R.id.register_button);
+        buttonLogin = (Button) findViewById(R.id.login_button);
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(registerIntent);
+                loginUser();
             }
         });
-
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate()) {
-                    String Email = mTextEmail.getText().toString();
-                    String Password = mTextPassword.getText().toString();
-
-                    User currentUser = db.Authenticate(new User(null, Email, Password));
-
-                    if (currentUser != null) {
-                        Snackbar.make(mButtonLogin, "Successfully Logged In!", Snackbar.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        //finish();
-                    } else {
-                        Snackbar.make(mButtonLogin, "Login Error! Please Try Again!", Snackbar.LENGTH_LONG).show();
-
-                    }
-                }
+                Intent toRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(toRegister);
             }
-
         });
     }
 
-    public boolean validate() {
-        boolean valid = true;
-        String Email = mTextEmail.getText().toString();
-        String Password = mTextPassword.getText().toString();
+    private void loginUser() {
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
-            valid = false;
-            mTextEmail.setError("Please enter valid email!");
-        } else {
-            mTextEmail.setError(null);
+        if(TextUtils.isEmpty(email)) {
+            editTextEmail.setError("Please, fill all fields!");
+            return;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmail.setError("Please enter valid email!");
+            return;
+        }
+        if(TextUtils.isEmpty(password)) {
+            editTextPassword.setError("Please, fill all fields!");
+            return;
         }
 
-        if (Password.isEmpty()) {
-            valid = false;
-            mTextPassword.setError("Please enter valid password!");
-        } else {
-            if (Password.length() > 5) {
-                mTextPassword.setError(null);
-            } else {
-                valid = false;
-                mTextPassword.setError("Password is to short!");
+
+        progressDialog.setMessage("Logging In... ");
+        progressDialog.show();
+
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressDialog.dismiss();
+                if(task.isSuccessful()) {
+                    if(auth.getCurrentUser().isEmailVerified()) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Please verify your email address!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Check your email and password!", Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-        return valid;
+        });
+
     }
 }

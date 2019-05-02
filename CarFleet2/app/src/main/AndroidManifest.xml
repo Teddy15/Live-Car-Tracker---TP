@@ -40,6 +40,8 @@
                 <action android:name="android.intent.action.CREATE_GROUP" />
             </intent-filter>
         </activity>
+        <activity android:name=".GroupActivity">
+        </activity>
     </application>
 
 </manifest>
