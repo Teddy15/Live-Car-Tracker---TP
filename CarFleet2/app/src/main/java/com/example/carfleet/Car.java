@@ -16,6 +16,10 @@ public class Car {
         this.releaseDate = releaseDate;
     }
 
+    public Car(String name){
+        this.name = name;
+    }
+
     public Car(String name, Date releaseDate) {
         this.name = name;
         this.releaseDate = releaseDate;

@@ -45,12 +45,12 @@ public class Cars extends SQLiteOpenHelper {
     public boolean add(Car car){
         if (!exists(car)) {
             SQLiteDatabase db = this.getWritableDatabase();
-            SQLiteStatement stmt = db.compileStatement("INSERT INTO movies(name, release_date) " +
-                    "VALUES(?, ?);");
+            SQLiteStatement stmt = db.compileStatement("INSERT INTO movies(name) " +
+                    "VALUES(?);");
             int id;
 
             stmt.bindString(1, car.getName());
-            stmt.bindString(2, car.getReleaseDate().toString());
+//            stmt.bindString(2, car.getReleaseDate().toString());
             id = (int) stmt.executeInsert();
             if (id != -1) {
                 car.setId(id);

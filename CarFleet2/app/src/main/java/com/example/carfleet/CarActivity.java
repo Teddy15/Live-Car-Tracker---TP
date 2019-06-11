@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 public class CarActivity extends AppCompatActivity {
 
-
+    Cars cars;
     ArrayAdapter<String> adapter;
     EditText editText;
     ArrayList<String> itemList;
@@ -24,6 +24,7 @@ public class CarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
 
+        cars = new Cars(this);
         ListView listView = (ListView) findViewById(R.id.listv);
         final String items[] = new String[] {"Car1"};
         itemList = new ArrayList<String>(Arrays.asList(items));
@@ -38,6 +39,7 @@ public class CarActivity extends AppCompatActivity {
                 String newItem=editText.getText().toString();
                 // add new item to arraylist
                 itemList.add(newItem);
+                cars.add(new Car(newItem));
                 // notify listview of data changed
                 //adapter.notifyDataSetChanged();
                 //adapter = new ArrayAdapter<String>(CarActivity.this, android.R.layout.simple_list_item_1, itemList);
