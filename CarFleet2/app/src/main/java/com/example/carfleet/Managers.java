@@ -78,3 +78,4 @@ public class Managers extends SQLiteOpenHelper {
         return manager;
     }
 }
+
