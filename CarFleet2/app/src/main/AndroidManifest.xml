@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CarActivity"></activity>
+        <activity android:name=".Car.EditDataActivity"></activity>
+        <activity android:name=".Car.ListDataActivity" />
+        <activity android:name=".Car.CarActivity" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".LoginActivity"
@@ -37,7 +39,7 @@
                 <action android:name="android.intent.action.CREATE_GROUP" />
             </intent-filter>
         </activity>
-        <activity android:name=".GroupActivity"></activity>
+        <activity android:name=".GroupActivity" />
     </application>
 
 </manifest>
