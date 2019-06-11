@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Arrays;
+
 public class CreateGroupActivity extends AppCompatActivity {
     EditText mManagerEditText;
     EditText mGroupMembersEditText;
@@ -37,7 +39,9 @@ public class CreateGroupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(validateUsers()) {
                     if (users.exists(new User(mManagerEditText.getText().toString().trim()))) {
-                        if (managers.add(new Manager(mManagerEditText.getText().toString().trim()))) {
+                        Manager manager = new Manager(mManagerEditText.getText().toString().trim(),
+                                Arrays.asList(mGroupMembersEditText.getText().toString().split(",")));
+                        if (managers.add(manager)) {
                             Snackbar.make(mCreateGroupButton, "Successfully Created Group!", Snackbar.LENGTH_LONG).show();
                             Intent intent = new Intent(CreateGroupActivity.this, GroupActivity.class);
                             startActivity(intent);
@@ -63,9 +67,19 @@ public class CreateGroupActivity extends AppCompatActivity {
                 valid = false;
                 mGroupMembersEditText.setError("One of the emails is not registered/not valid!");
                 break;
+            } else if(users.findByEmail(member).getIsInGroup() == 1) {
+                valid = false;
+                mGroupMembersEditText.setError("One of the members you are trying to add is already in another group!");
+                break;
+            } else if(managers.findByName(member) != null) {
+                valid = false;
+                mGroupMembersEditText.setError("One of your members is already a manager!");
+                break;
             }
             else {
                 group.insertData(name, member, manager);
+                User user = users.findByEmail(member);
+                users.inGroup(user, 1);
             }
         }
         return valid;

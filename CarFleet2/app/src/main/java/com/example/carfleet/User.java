@@ -4,6 +4,7 @@ public class User {
     public int id;
     public String email;
     public String password;
+    public int isInGroup = 0;
 
     public User(int id, String email, String password) {
         this.id = id;
@@ -37,9 +38,7 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     public String getPassword() {
         return password;
@@ -48,4 +47,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public int getIsInGroup() { return isInGroup; }
+
+    public void setIsInGroup(int isInGroup) { this.isInGroup = isInGroup; }
 }

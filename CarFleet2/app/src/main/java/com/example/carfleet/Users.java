@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteStatement;
 
 public class Users extends SQLiteOpenHelper {
 
-    public static final String TABLE_NAME = "users";
-
     public Users(Context context) {
         super(context, Config.DATABASE_NAME, null, Config.DATABASE_VERSION);
     }
@@ -19,28 +17,23 @@ public class Users extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS users(" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "username TEXT UNIQUE NOT NULL," +
-                "password TEXT NOT NULL" +
+                "password TEXT NOT NULL," +
+                "isInGroup INTEGER" +
                 ");");
     }
 
-    //@Override
-    //public void onOpen(SQLiteDatabase db) {
-    //    onCreate(db);
-    //    super.onOpen(db);
-    // }
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        onCreate(db);
+        super.onOpen(db);
+    }
 
-    /*@Override
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
             db.execSQL(" DROP TABLE IF EXISTS users;");
             onCreate(db);
         }
-    }*/
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
     }
 
     public boolean add(User user) {
@@ -79,5 +72,17 @@ public class Users extends SQLiteOpenHelper {
 
     public boolean exists(User user) {
         return findByEmail(user.getEmail()) != null;
+    }
+
+    public boolean inGroup(User user, int isInGroup) {
+        if(!exists(user)) {
+            return false;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        SQLiteStatement stmt =  db.compileStatement("UPDATE users SET isInGroup=? WHERE ID=?");
+        stmt.bindLong(1, isInGroup);
+        stmt.bindLong(2, user.getId());
+        user.setIsInGroup(isInGroup);
+        return stmt.executeUpdateDelete() > 0;
     }
 }
