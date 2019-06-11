@@ -29,7 +29,7 @@ public class Cars extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            db.execSQL(" DROP TABLE IF EXISTS actors;");
+            db.execSQL(" DROP TABLE IF EXISTS cars;");
             onCreate(db);
         }
     }
@@ -44,7 +44,7 @@ public class Cars extends SQLiteOpenHelper {
     public boolean add(Car car){
         if (!exists(car)) {
             SQLiteDatabase db = this.getWritableDatabase();
-            SQLiteStatement stmt = db.compileStatement("INSERT INTO movies(name) " +
+            SQLiteStatement stmt = db.compileStatement("INSERT INTO cars(name) " +
                     "VALUES(?);");
             int id;
 

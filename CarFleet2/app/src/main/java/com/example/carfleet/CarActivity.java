@@ -25,8 +25,7 @@ public class CarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_car);
 
         cars = new Cars(this);
-        ListView listView = (ListView) findViewById(R.id.listv);
-        final String items[] = new String[] {"Car1"};
+        String[] items = new String[] {"Car1"};
         itemList = new ArrayList<String>(Arrays.asList(items));
         adapter = new ArrayAdapter<String>(this,R.layout.list_item,R.id.txtview,itemList);
         final ListView listV=(ListView)findViewById(R.id.listv);

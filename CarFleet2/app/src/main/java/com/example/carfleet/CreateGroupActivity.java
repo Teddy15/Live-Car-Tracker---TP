@@ -14,15 +14,18 @@ public class CreateGroupActivity extends AppCompatActivity {
     EditText mGroupMembersEditText;
     EditText mNameEditText;
     Button mCreateGroupButton;
-    CreateGroup db;
-    Users dbh;
+    CreateGroup group;
+    Users users;
+    Managers managers;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_create_group);
-        db = new CreateGroup(this);
-        dbh = new Users(this);
+
+        group = new CreateGroup(this);
+        users = new Users(this);
+        managers = new Managers(this);
 
         mManagerEditText = (EditText)findViewById(R.id.edittext_manager) ;
         mNameEditText = (EditText)findViewById(R.id.edittext_name);
@@ -33,9 +36,17 @@ public class CreateGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateUsers()) {
-                    Snackbar.make(mCreateGroupButton, "Successfully Created Group!", Snackbar.LENGTH_LONG).show();
-                    Intent intent = new Intent(CreateGroupActivity.this, GroupActivity.class);
-                    startActivity(intent);
+                    if (users.exists(new User(mManagerEditText.getText().toString().trim()))) {
+                        if (managers.add(new Manager(mManagerEditText.getText().toString().trim()))) {
+                            Snackbar.make(mCreateGroupButton, "Successfully Created Group!", Snackbar.LENGTH_LONG).show();
+                            Intent intent = new Intent(CreateGroupActivity.this, GroupActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Snackbar.make(mCreateGroupButton, "Manager is already managing another group!", Snackbar.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Snackbar.make(mCreateGroupButton, "Can not create manager with wrong username!", Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -46,14 +57,15 @@ public class CreateGroupActivity extends AppCompatActivity {
         String name = mNameEditText.getText().toString();
         String manager = mManagerEditText.getText().toString().trim();
         boolean valid = true;
+
         for(String member : groupMembers) {
-            if(!dbh.exists(new User(member))) {
+            if(!users.exists(new User(member))) {
                 valid = false;
                 mGroupMembersEditText.setError("One of the emails is not registered/not valid!");
                 break;
             }
             else {
-                db.insertData(name, member, manager);
+                group.insertData(name, member, manager);
             }
         }
         return valid;

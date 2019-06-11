@@ -44,7 +44,7 @@ public class   LoginActivity extends AppCompatActivity {
                 String password = mTextPassword.getText().toString();
 
                 User user = users.findByEmail(email);
-                if(users.exists(user)) {
+                if(user != null) {
                     if (validate(email, password, user)) {
                         Snackbar.make(mButtonLogin, "Successfully Logged In!", Snackbar.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
