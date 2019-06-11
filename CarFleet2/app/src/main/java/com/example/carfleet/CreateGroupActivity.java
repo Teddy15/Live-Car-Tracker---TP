@@ -9,23 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CreateGroupActivity extends AppCompatActivity {
     EditText mManagerEditText;
     EditText mGroupMembersEditText;
     EditText mNameEditText;
     Button mCreateGroupButton;
     CreateGroup db;
-    DatabaseHelper dbh;
+    Users dbh;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_create_group);
         db = new CreateGroup(this);
-        dbh = new DatabaseHelper(this);
+        dbh = new Users(this);
 
         mManagerEditText = (EditText)findViewById(R.id.edittext_manager) ;
         mNameEditText = (EditText)findViewById(R.id.edittext_name);
@@ -50,7 +47,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         String manager = mManagerEditText.getText().toString().trim();
         boolean valid = true;
         for(String member : groupMembers) {
-            if(!dbh.isEmailExists(member)) {
+            if(!dbh.exists(new User(member))) {
                 valid = false;
                 mGroupMembersEditText.setError("One of the emails is not registered/not valid!");
                 break;

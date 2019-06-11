@@ -2,110 +2,102 @@ package com.example.carfleet;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-
-public class RegisterActivity extends AppCompatActivity{
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private EditText editTextConfirmPassword;
-    private Button buttonRegister;
-    private Button buttonLogin;
-
-    private FirebaseAuth auth;
-
-    private ProgressDialog progressDialog;
+public class RegisterActivity extends AppCompatActivity {
+    Users users;
+    EditText mTextEmail;
+    EditText mTextPassword;
+    EditText mTextConfirmPassword;
+    Button mButtonRegister;
+    TextView mTextViewLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        auth = FirebaseAuth.getInstance();
+        users = new Users(this);
+        mTextEmail = (EditText) findViewById(R.id.email);
+        mTextPassword = (EditText) findViewById(R.id.password);
+        mTextConfirmPassword = (EditText) findViewById(R.id.confirm_password);
+        mButtonRegister = (Button) findViewById(R.id.register_button);
+        mTextViewLogin = (TextView) findViewById(R.id.login_button);
 
-        progressDialog = new ProgressDialog(this);
-
-        editTextEmail = (EditText) findViewById(R.id.email);
-        editTextPassword = (EditText) findViewById(R.id.password);
-        editTextConfirmPassword = (EditText) findViewById(R.id.confirm_password);
-        buttonRegister = (Button) findViewById(R.id.register_button);
-        buttonLogin = (Button) findViewById(R.id.login_button);
-
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
+        mTextViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerUser();
+                Intent LoginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(LoginIntent);
             }
         });
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+
+        mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toLogin = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(toLogin);
-            }
-        });
-    }
+                String email = mTextEmail.getText().toString();
+                String password = mTextPassword.getText().toString();
+                String confirmPassword = mTextConfirmPassword.getText().toString();
 
-    private void registerUser() {
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
-
-        if(TextUtils.isEmpty(email)) {
-            editTextEmail.setError("Please, fill all fields!");
-            return;
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextEmail.setError("Please enter valid email!");
-            return;
-        }
-        if(TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Please, fill all fields!");
-            return;
-        }
-        if(TextUtils.isEmpty(confirmPassword)) {
-            editTextConfirmPassword.setError("Please, fill all fields!");
-            return;
-        }
-        if(!password.equals(confirmPassword)) {
-            editTextConfirmPassword.setError("Passwords should match!");
-            return;
-        }
-
-        progressDialog.setMessage("Registering User... ");
-        progressDialog.show();
-
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                Toast.makeText(RegisterActivity.this, "Please verify your email address!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                User user = users.findByEmail(email);
+                if(user == null) {
+                    user = new User(email, password);
+                    if (validate(email, password, confirmPassword, user)) {
+                        if(users.add(user)) {
+                            Snackbar.make(mButtonRegister, "User created successfully! Please Login!", Snackbar.LENGTH_LONG).show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            }, Snackbar.LENGTH_LONG);
+                        }else {
+                            Snackbar.make(mButtonRegister, "Something went wrong!", Snackbar.LENGTH_LONG).show();
                         }
-                    });
-
+                    }
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Check your email and password", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mButtonRegister, "User already exists!", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
+    }
+    public boolean validate(String email, String password, String confirmPassword, User user) {
+        boolean valid = true;
 
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            valid = false;
+            mTextEmail.setError("Please enter valid email!");
+        } else {
+            mTextEmail.setError(null);
+        }
+
+        if (password.isEmpty()) {
+            valid = false;
+            mTextPassword.setError("Please enter valid password!");
+        } else {
+            if (password.length() > 5) {
+                mTextPassword.setError(null);
+            } else {
+                valid = false;
+                mTextPassword.setError("Password is to short! Enter at least 5 symbols!");
+            }
+        }
+
+        if(!password.equals(confirmPassword)) {
+            valid = false;
+            mTextPassword.setError("Passwords does not match!");
+        }
+
+        return valid;
     }
 }
