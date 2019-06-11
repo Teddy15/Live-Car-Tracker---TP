@@ -25,13 +25,15 @@ public class CarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_car);
 
         cars = new Cars(this);
-        String[] items = new String[] {"Car1"};
-        itemList = new ArrayList<String>(Arrays.asList(items));
-        adapter = new ArrayAdapter<String>(this,R.layout.list_item,R.id.txtview,itemList);
-        final ListView listV=(ListView)findViewById(R.id.listv);
-        listV.setAdapter(adapter);
         editText =(EditText)findViewById(R.id.txtInput);
         Button btAdd=(Button)findViewById(R.id.btAdd);
+
+        String[] items = new String[] {"Car1"};
+        itemList = new ArrayList<String>(Arrays.asList(items));
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemList);
+        final ListView listV=(ListView)findViewById(R.id.listv);
+        listV.setAdapter(adapter);
+
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,8 +42,9 @@ public class CarActivity extends AppCompatActivity {
                 itemList.add(newItem);
                 cars.add(new Car(newItem));
                 // notify listview of data changed
-                //adapter.notifyDataSetChanged();
-                //adapter = new ArrayAdapter<String>(CarActivity.this, android.R.layout.simple_list_item_1, itemList);
+                adapter.notifyDataSetChanged();
+                adapter = new ArrayAdapter<String>(CarActivity.this, android.R.layout.simple_list_item_1, itemList);
+
                 listV.setAdapter(adapter);
                 (editText).setText(" ");
             }

@@ -12,11 +12,14 @@ public class MainActivity extends AppCompatActivity {
     ImageButton CarButton;
     ImageButton CreateGroupButton;
     ImageButton LogOutButton;
+    Users users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        users = new Users(this);
 
         CarButton = (ImageButton) findViewById(R.id.car_button);
         CreateGroupButton = (ImageButton)findViewById(R.id.create_group_button);

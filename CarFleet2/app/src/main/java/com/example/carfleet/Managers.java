@@ -18,23 +18,37 @@ public class Managers extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS managers(" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "username TEXT UNIQUE NOT NULL" +
+                "username TEXT UNIQUE NOT NULL," +
+                "users TEXT" +
                 ");");
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        onCreate(db);
+        super.onOpen(db);
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        if (newVersion > oldVersion) {
+            db.execSQL(" DROP TABLE IF EXISTS managers;");
+            onCreate(db);
+        }
     }
+
 
     public boolean add(Manager manager) {
         if(!exists(manager)) {
             SQLiteDatabase db = getWritableDatabase();
-            SQLiteStatement stmt = db.compileStatement("INSERT INTO managers(username) " + "VALUES(?);");
+            SQLiteStatement stmt = db.compileStatement("INSERT INTO managers(username, users) " + "VALUES(?, ?);");
             int id;
             stmt.bindString(1, manager.getUsername());
+            StringBuilder stringBuilder  = new StringBuilder();
+            for(String user : manager.getUsers()) {
+                stringBuilder.append(user);
+            }
+            stmt.bindString(2, stringBuilder.toString());
             id = (int) stmt.executeInsert();
             if(id != -1) {
                 manager.setId(id);
@@ -48,7 +62,7 @@ public class Managers extends SQLiteOpenHelper {
         return findByName(manager.getUsername()) != null;
     }
 
-    private Manager findByName(String username) {
+    public Manager findByName(String username) {
         String[] cols = new String[]{ username };
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM managers " + "WHERE username=?;", cols);

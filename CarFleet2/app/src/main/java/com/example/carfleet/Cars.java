@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -98,4 +99,5 @@ public class Cars extends SQLiteOpenHelper {
     private boolean exists(Car car) {
         return findById(car.getId()) != null || findByName(car.getName()) != null;
     }
+
 }
