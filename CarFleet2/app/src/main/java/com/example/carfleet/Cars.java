@@ -49,7 +49,7 @@ public class Cars extends SQLiteOpenHelper {
             int id;
 
             stmt.bindString(1, car.getName());
-//            stmt.bindString(2, car.getReleaseDate().toString());
+
             id = (int) stmt.executeInsert();
             if (id != -1) {
                 car.setId(id);
