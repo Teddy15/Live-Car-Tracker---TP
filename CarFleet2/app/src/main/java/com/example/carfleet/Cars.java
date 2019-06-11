@@ -20,10 +20,9 @@ public class Cars extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS actors(" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS cars(" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "name TEXT UNIQUE NOT NULL," +
-                "age INTEGER NOT NULL" +
+                "name TEXT UNIQUE NOT NULL" +
                 ");");
     }
 
