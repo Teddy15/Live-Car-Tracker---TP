@@ -78,6 +78,18 @@ public class ListDataActivity extends AppCompatActivity {
         });
     }
 
+//    private boolean isCarFree(){
+//        ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
+//        mListView.setAdapter(adapter);
+//
+//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+//    }
+
 
     private void toastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();

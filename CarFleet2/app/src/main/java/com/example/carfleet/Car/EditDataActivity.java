@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carfleet.R;
@@ -19,7 +20,7 @@ public class EditDataActivity extends AppCompatActivity {
 
     private static final String TAG = "EditDataActivity";
 
-    private Button btnSave,btnDelete;
+    private Button btnSave,btnDelete,btnBook;
     private EditText editable_item;
 
     Cars mDatabaseHelper;
@@ -33,6 +34,9 @@ public class EditDataActivity extends AppCompatActivity {
         setContentView(R.layout.edit_data_layout);
         btnSave = (Button) findViewById(R.id.btnSave);
         btnDelete = (Button) findViewById(R.id.btnDelete);
+        btnBook = (Button) findViewById(R.id.btnBook);
+        TextView textView = findViewById(R.id.textView2);
+
         editable_item = (EditText) findViewById(R.id.editable_item);
         mDatabaseHelper = new Cars(this);
 
@@ -64,6 +68,21 @@ public class EditDataActivity extends AppCompatActivity {
                 mDatabaseHelper.deleteName(selectedID,selectedName);
                 editable_item.setText("");
                 toastMessage("removed from database");
+            }
+        });
+
+        String date = getIntent().getStringExtra("date");
+
+        if(date != null){
+            textView.setText(date);
+        }
+
+
+        btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditDataActivity.this, CalenderActivity.class);
+                startActivity(intent);
             }
         });
 
