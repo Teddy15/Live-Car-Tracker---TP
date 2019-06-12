@@ -67,10 +67,6 @@ public class CreateGroupActivity extends AppCompatActivity {
                 valid = false;
                 mGroupMembersEditText.setError("One of the emails is not registered/not valid!");
                 break;
-            } else if(users.findByEmail(member).getIsInGroup() == 1) {
-                valid = false;
-                mGroupMembersEditText.setError("One of the members you are trying to add is already in another group!");
-                break;
             } else if(managers.findByName(member) != null) {
                 valid = false;
                 mGroupMembersEditText.setError("One of your members is already a manager!");
@@ -78,8 +74,6 @@ public class CreateGroupActivity extends AppCompatActivity {
             }
             else {
                 group.insertData(name, member, manager);
-                User user = users.findByEmail(member);
-                users.inGroup(user, 1);
             }
         }
         return valid;

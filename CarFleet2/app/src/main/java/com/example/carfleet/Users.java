@@ -17,8 +17,7 @@ public class Users extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS users(" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "username TEXT UNIQUE NOT NULL," +
-                "password TEXT NOT NULL," +
-                "isInGroup INTEGER" +
+                "password TEXT NOT NULL" +
                 ");");
     }
 
@@ -72,17 +71,5 @@ public class Users extends SQLiteOpenHelper {
 
     public boolean exists(User user) {
         return findByEmail(user.getEmail()) != null;
-    }
-
-    public boolean inGroup(User user, int isInGroup) {
-        if(!exists(user)) {
-            return false;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        SQLiteStatement stmt =  db.compileStatement("UPDATE users SET isInGroup=? WHERE ID=?");
-        stmt.bindLong(1, isInGroup);
-        stmt.bindLong(2, user.getId());
-        user.setIsInGroup(isInGroup);
-        return stmt.executeUpdateDelete() > 0;
     }
 }

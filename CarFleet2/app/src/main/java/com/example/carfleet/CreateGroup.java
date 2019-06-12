@@ -24,10 +24,8 @@ public class CreateGroup extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion < newVersion) {
-            db.execSQL(" DROP TABLE IF EXISTS groups;");
-            onCreate(db);
-        }
+        db.execSQL(" DROP TABLE IF EXISTS groups;");
+        onCreate(db);
     }
 
     /*@Override
